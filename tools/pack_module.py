@@ -64,7 +64,7 @@ def main():
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as z:
-        for name in ("post-fs-data.sh", "customize.sh", "kmi.sh"):
+        for name in ("post-fs-data.sh", "customize.sh", "kmi.sh", "early-dispatch.sh", "load.sh", "uninstall.sh"):
             z.write(ROOT / "module" / name, name)
         z.writestr("kmis", "".join(k + "\n" for k in kmis))
         z.writestr("module.prop", module_prop)

@@ -22,12 +22,13 @@ def main():
                         "--tag", "v0.0.0-test", "--out", str(out)], check=True)
         with zipfile.ZipFile(out) as z:
             names = set(z.namelist())
-            need = {"post-fs-data.sh", "customize.sh", "kmi.sh", "kmis", "module.prop",
+            need = {"post-fs-data.sh", "customize.sh", "kmi.sh", "early-dispatch.sh", "load.sh", "uninstall.sh", "kmis", "module.prop",
                     "bin/susfs_insmod", "provenance.json", "LICENSE"} | {f"lib/susfs_guard_lkm-{k}.ko" for k in kmis}
             assert not need - names, f"missing: {need - names}"
             prop = z.read("module.prop").decode()
             assert "id=susfs_guard_lkm" in prop and "version=v0.0.0-test" in prop, prop
             assert z.read("kmis").decode().split() == kmis
+            assert "early_load" not in names
         print("pack test ok")
 
 
